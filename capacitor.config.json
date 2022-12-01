@@ -1,0 +1,6 @@
+{
+  "appId": "com.victor.weshare",
+  "appName": "weshare",
+  "webDir": ".output/public",
+  "bundledWebRuntime": false
+}
