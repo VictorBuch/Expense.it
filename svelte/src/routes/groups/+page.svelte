@@ -8,7 +8,7 @@
 
 <div class="space-y-8 mt-12 container">
     {#each groups as group}
-    <a href={`/expenses/${group.name}`} class="card w-full select-none cursor-pointer rounded-sm bg-base-200 shadow-lg">
+    <a href={`/groups/${group.name}`} class="card w-full select-none cursor-pointer rounded-sm bg-base-200 shadow-lg">
         <figure class='h-20 relative'><img src="https://placeimg.com/400/225/arch" alt="Shoes" />
 			<p class="absolute text-white font-bold text-xl">{group.name}</p>
 		</figure>
@@ -25,6 +25,6 @@
 	</a>
 {/each}
 </div>
-<button class="btn btn-circle bg-primary hover:bg-primary-focus border-none fixed bottom-4 right-4">
+<a href='/groups/create-group' class="btn btn-circle bg-primary hover:bg-primary-focus border-none fixed bottom-4 right-4">
 <i class="fa-solid fa-plus text-primary-content"></i>
-</button>
+</a>
