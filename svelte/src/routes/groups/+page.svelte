@@ -1,21 +1,30 @@
 <script>
+	import {user} from '$lib/stores/user'
 	let groups = [
 		{ name: 'house', total: 1000, myShare: 20 },
 		{ name: 'new years', total: 2009, myShare: 198 }
 	];
+
+	export let data
 </script>
 
 <header class="h-16 flex select-none items-center py-2 px-4 shadow-lg bg-base-200">
 	<div class="avatar">
 		<div class="w-10 rounded-full">
-			<img src="https://placeimg.com/192/192/people" />
+			{#if $user?.user_metadata?.picture}
+			<img src={$user.user_metadata.picture} alt='users google avatar'/>
+			{:else}
+			<img src="https://placeimg.com/192/192/people" alt="radomly generated" />
+			{/if}
 		</div>
 	</div>
 	<div class="ml-2">
-		<p class="text-md leading-5 font-bold text-base-content">Victor Buch</p>
+		<p class="text-md leading-5 font-bold text-base-content">{$user?.user_metadata?.name}</p>
 	</div>
 	<a href="/groups/invites" class="ml-auto">
-		<span class="indicator-item badge badge-info">1</span>
+		{#if data.invites.length}
+		<span class="indicator-item badge badge-info">{data.invites.length}</span>
+		{/if}
 		<i class="fa-solid fa-bell text-primary scale-125" />
 	</a>
 </header>
@@ -40,6 +49,14 @@
 				</div>
 			</div>
 		</a>
+	{:else}
+		<div class="card w-full select-none  rounded-sm bg-base-200 shadow-lg">
+			<div class="flex px-12 py-12 flex-row justify-between">
+				<div class="text-center">
+					<p class="text-base-content font-bold text-lg">You are not in any groups</p>
+				</div>
+			</div>
+		</div>
 	{/each}
 </div>
 <a

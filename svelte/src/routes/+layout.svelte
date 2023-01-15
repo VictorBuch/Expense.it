@@ -1,8 +1,11 @@
 <script>
 	import './styles.css';
 	import { supabaseClient } from '$lib/db';
-	import { invalidate } from '$app/navigation';
+	import { invalidate, goto } from '$app/navigation';
 	import { onMount } from 'svelte';
+	import { page } from '$app/stores'
+	import { user } from '$lib/stores/user';
+	
 
 	// TODO: make storing user work
 	// import { Preferences } from '@capacitor/preferences';
@@ -27,9 +30,16 @@
 	onMount(async () => {
 		const {
 			data: { subscription }
-		} = supabaseClient.auth.onAuthStateChange(() => {
+		} = supabaseClient.auth.onAuthStateChange((_, session) => {
 			invalidate('supabase:auth');
 		});
+
+	if($page.data.session.user){
+		user.set($page.data.session.user)
+		// goto('/groups')
+	}else{
+		// goto('/login')
+	}
 		return () => {
 			subscription.unsubscribe();
 		};

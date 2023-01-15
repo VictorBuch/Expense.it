@@ -1,12 +1,15 @@
 <script>
-	let invitations = [
-		{ group: 'Household', inviter: 'Victor Buch', other_people_in_group: ['Nick', 'Mark', 'Line'] },
-		{
-			group: 'Satans deciples',
-			inviter: 'Not Buch',
-			other_people_in_group: ['Mark', 'Kirt', 'Line']
-		}
-	];
+
+	export let data;
+	$: invitations = data.invites;
+	// let invitations = [
+	// 	{ group: 'Household', inviter: 'Victor Buch', other_people_in_group: ['Nick', 'Mark', 'Line'] },
+	// 	{
+	// 		group: 'Satans deciples',
+	// 		inviter: 'Not Buch',
+	// 		other_people_in_group: ['Mark', 'Kirt', 'Line']
+	// 	}
+	// ];
 
 	const rejectInvitation = () => {
 		console.log('reject invite');
@@ -27,7 +30,7 @@
 <div class="space-y-6 mt-6 flex flex-col items-center container">
 	{#each invitations as invitation}
 		<div
-			class="card w-full select-none cursor-pointer rounded-sm bg-base-200 dark:bg-base-300 shadow-xl"
+			class="card w-full select-none cursor-pointer rounded-sm bg-base-200 dark:bg-base-200 shadow-xl"
 		>
 			<figure class="h-20 relative">
 				<img src="https://placeimg.com/400/225/arch" alt="Shoes" />
@@ -41,6 +44,14 @@
 			<div class="m-2 flex justify-evenly">
 				<button class="btn btn-error w-1/3">Reject</button>
 				<button class="btn btn-success w-1/2">Accept</button>
+			</div>
+		</div>
+		{:else}
+		<div class="card w-full select-none rounded-sm bg-base-100 dark:bg-base-200 shadow-xl">
+			<div class="flex px-4 py-12 flex-row justify-between">
+				<div class="text-center">
+					<p class="text-base-content font-bold text-lg">No invites</p>
+				</div>
 			</div>
 		</div>
 	{/each}

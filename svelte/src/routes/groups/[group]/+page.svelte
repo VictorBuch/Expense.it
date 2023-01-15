@@ -1,22 +1,23 @@
 <script>
-	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import { comment } from 'postcss';
+
+	 export let data;
 
 	let currency = 'kr.';
-	let expenses = [
-		{ amount: 200, myShare: 100, paidBy: 'me' },
-		{ amount: 700, myShare: 350, paidBy: 'Vero' },
-		{ amount: 200, myShare: 100, paidBy: 'me' },
-		{ amount: 200, myShare: 100, paidBy: 'me' },
-		{ amount: 700, myShare: 350, paidBy: 'Vero' },
-		{ amount: 700, myShare: 350, paidBy: 'Vero' },
-		{ amount: 200, myShare: 100, paidBy: 'me' },
-		{ amount: 200, myShare: 100, paidBy: 'me' },
-		{ amount: 700, myShare: 350, paidBy: 'Vero' },
-		{ amount: 200, myShare: 100, paidBy: 'me' },
-		{ amount: 700, myShare: 350, paidBy: 'Vero' }
-	];
+	$: expenses = data.expenses;
+	// let expenses = [
+	// 	{ amount: 200, myShare: 100, paidBy: 'me' },
+	// 	{ amount: 700, myShare: 350, paidBy: 'Vero' },
+	// 	{ amount: 200, myShare: 100, paidBy: 'me' },
+	// 	{ amount: 200, myShare: 100, paidBy: 'me' },
+	// 	{ amount: 700, myShare: 350, paidBy: 'Vero' },
+	// 	{ amount: 700, myShare: 350, paidBy: 'Vero' },
+	// 	{ amount: 200, myShare: 100, paidBy: 'me' },
+	// 	{ amount: 200, myShare: 100, paidBy: 'me' },
+	// 	{ amount: 700, myShare: 350, paidBy: 'Vero' },
+	// 	{ amount: 200, myShare: 100, paidBy: 'me' },
+	// 	{ amount: 700, myShare: 350, paidBy: 'Vero' }
+	// ];
 </script>
 
 <main class="h-screen">
@@ -25,7 +26,9 @@
 			<i class=" fa-solid fa-chevron-left cursor-pointer scale-125 text-primary mr-8" />
 		</a>
 		<h1 class="text-lg text-base-content font-semibold uppercase">{$page.params.group}</h1>
-		<i class="fa-solid fa-gear scale-125 text-primary ml-auto" />
+		<a class="ml-auto" href={'/groups/'+$page.params.group + '/settings'}>
+			<i class="fa-solid fa-gear scale-125 text-primary" />
+		</a>
 		<div class="absolute origin-center -bottom-3 z-30 w-full flex items-center justify-center ">
 			<a href={`/groups/${$page.params.group}/expenses`}>
 				<span
