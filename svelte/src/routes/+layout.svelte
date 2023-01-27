@@ -36,9 +36,9 @@
 
 	if($page.data.session.user){
 		user.set($page.data.session.user)
-		// goto('/groups')
+		goto('/groups')
 	}else{
-		// goto('/login')
+		goto('/login')
 	}
 		return () => {
 			subscription.unsubscribe();

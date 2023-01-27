@@ -1,7 +1,53 @@
 <script>
-	const createGroup = () => {
-		console.log('create group');
-	};
+	import {user} from '$lib/stores/user'
+	import {supabaseClient} from '$lib/db'
+	import { goto } from '$app/navigation';
+
+	// Dummy data
+	let group = {
+		id: '',
+		name: '',
+		people: [{id: 'dcb345cc-09fe-4af7-9ba2-8cd3e1f5cb0d', name:'victor'}, {id: '165f07bb-d3e2-4c30-8c79-54219fa2bd02', name: 'martin'}]
+	}
+	// Actual data
+	// let group = {
+	// 	id: '',
+	// 	name: '',
+	// 	people: [$user]
+	// }
+	async function createGroup() {
+		try {
+			// TODO: Change this to be dynamic
+			const groupObjForDB = {
+				name: group.name,
+				user_1: group?.people[0].id,
+				user_2: group?.people[1].id
+			}
+
+			const {data, error} = await supabaseClient
+			.from('groups')
+			.insert(groupObjForDB)
+			.select()
+
+			if(error) throw error
+
+			group.id = data[0].id
+
+			for (let i = 0; i < group.people.length; i++) {
+				if(group.people[i].id !== $user.id) {
+					const {data, error} = await supabaseClient.from('invitations').insert({
+						group_id: group.id,
+						invited_user_id: group.people[i].id,
+						invited_by_user_id: $user.id
+					})
+					if(error) throw error
+				}
+			}
+			goto('/groups')
+		} catch (error) {
+			console.log(error)
+		}
+	}
 </script>
 
 <main class="h-screen relative">
@@ -10,6 +56,7 @@
 			type="text"
 			class="input text-center input-ghost focus:outline-none focus:bg-transparent custom-caret placeholder:text-xl placeholder:text-base-content placeholder:font-bold text-xl text-base-content font-bold"
 			placeholder="Enter group name"
+			bind:value={group.name}
 		/>
 		<a href="/groups">
 			<i
@@ -22,6 +69,7 @@
 	</div>
 	<!-- 	add	 -->
 	<div>
+		<!-- TODO: make this activate friends selection -->
 		<div class="py-1 px-2 cursor-pointer flex items-center bg-base-100">
 			<div
 				class="w-10 h-10 border border-solid border-base-200 rounded-full bg-base-100 flex items-center justify-center"

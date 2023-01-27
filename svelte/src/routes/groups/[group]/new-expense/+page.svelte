@@ -1,18 +1,17 @@
 <script>
 	import { page } from '$app/stores';
-	import {user} from '$lib/stores/user'
+	import { user } from '$lib/stores/user';
 	export let data;
 
-	let {users} = data;
+	let { users } = data;
 
-	let spliceIndex =Math.floor(users.length/2) 
-	console.log(spliceIndex, $user)
-	users.splice(spliceIndex, 0, $user)
-	console.log(users)
+	let spliceIndex = Math.floor(users.length / 2);
+	users.splice(spliceIndex, 0, $user);
 
-	let selected = users[spliceIndex]
+	let selected = users[spliceIndex];
 
-	
+	let currency = 'kr.';
+	let amount = '0';
 </script>
 
 <main>
@@ -24,28 +23,31 @@
 		<div class="flex items-center justify-center space-x-6 w-full overflow-x-hidden">
 			<select bind:value={selected.username} class="select max-w-xs">
 				{#each users as user}
-				<option value={user.username} class:selected={user.username=='Me'}>{user.username}</option>
+					<option value={user.user_metadata.name} class:selected={user.user_metadata.name == 'Me'}
+						>{user.user_metadata.name}</option
+					>
 				{/each}
 			</select>
 		</div>
 		<p class="text-base-content text-lg">
-			{#if selected.name == 'Me'}
-				 I pay
-		{:else}
+			{#if selected.name == $user.name}
+				I pay
+			{:else}
 				{selected.username} pays
-			
 			{/if}
 		</p>
 	</div>
 	<div
 		class="flex items-center justify-center space-x-2 relative bg-base-200 text-base-content h-min p-2"
 	>
-		<p class="text-lg font-semibold custom-caret active">300</p>
-		<!-- <div on:click={changeCurrecy} class="flex items-center cursor-pointer space-x-4">
+		<p class="text-lg font-semibold custom-caret active">{amount}</p>
+		<button on:click={changeCurrecy} class="flex items-center cursor-pointer space-x-4">
 			<p class="leading-3 font-xs">kr.</p>
 			<i class="fa-solid fa-circle-chevron-down text-primary" />
-		</div>
-		<i on:click={remove} class="fa-solid fa-delete-left absolute right-4 cursor-pointer" /> -->
+		</button>
+		<button on:click={removeDigit} class="absolute right-4">
+			<i class="fa-solid fa-delete-left" />
+		</button>
 	</div>
 
 	<div class="w-full h-min bg-base-200 text-base-content flex items-center justify-center my-1">
@@ -65,8 +67,8 @@
 					</div>
 				</div>
 				<div class="ml-2">
-					<p class="text-lg leading-5 font-bold text-base-content">{user.username}</p>
-					<p class="text-xs leading-5 text-base-content">{user.number?? 'unknown'}</p>
+					<p class="text-lg leading-5 font-bold text-base-content">{user.user_metadata.name}</p>
+					<p class="text-xs leading-5 text-base-content">{user.number ?? 'unknown'}</p>
 				</div>
 				<div class="ml-auto flex items-center space-x-5">
 					<p class="font-bold">0.00</p>

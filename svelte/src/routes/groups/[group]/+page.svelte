@@ -1,10 +1,10 @@
 <script>
 	import { page } from '$app/stores';
 
-	 export let data;
+	export let data;
+	let { expenses } = data;
 
 	let currency = 'kr.';
-	$: expenses = data.expenses;
 	// let expenses = [
 	// 	{ amount: 200, myShare: 100, paidBy: 'me' },
 	// 	{ amount: 700, myShare: 350, paidBy: 'Vero' },
@@ -26,7 +26,7 @@
 			<i class=" fa-solid fa-chevron-left cursor-pointer scale-125 text-primary mr-8" />
 		</a>
 		<h1 class="text-lg text-base-content font-semibold uppercase">{$page.params.group}</h1>
-		<a class="ml-auto" href={'/groups/'+$page.params.group + '/settings'}>
+		<a class="ml-auto" href={'/groups/' + $page.params.group + '/settings'}>
 			<i class="fa-solid fa-gear scale-125 text-primary" />
 		</a>
 		<div class="absolute origin-center -bottom-3 z-30 w-full flex items-center justify-center ">
