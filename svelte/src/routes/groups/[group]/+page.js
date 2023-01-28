@@ -4,7 +4,7 @@ import { supabaseClient } from '$lib/db';
 export async function load({ params }) {
 	const getExpenses = async () => {
 		const { data, error } = await supabaseClient
-			.from('expense')
+			.from('expenses')
 			.select('*')
 			.eq('group_id', params.group);
 

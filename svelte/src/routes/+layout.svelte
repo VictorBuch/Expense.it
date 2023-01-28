@@ -3,9 +3,8 @@
 	import { supabaseClient } from '$lib/db';
 	import { invalidate, goto } from '$app/navigation';
 	import { onMount } from 'svelte';
-	import { page } from '$app/stores'
+	import { page } from '$app/stores';
 	import { user } from '$lib/stores/user';
-	
 
 	// TODO: make storing user work
 	// import { Preferences } from '@capacitor/preferences';
@@ -34,12 +33,12 @@
 			invalidate('supabase:auth');
 		});
 
-	if($page.data.session.user){
-		user.set($page.data.session.user)
-		goto('/groups')
-	}else{
-		goto('/login')
-	}
+		if ($page.data.session.user) {
+			user.set($page.data.session.user);
+			goto('/groups');
+		} else {
+			goto('/login');
+		}
 		return () => {
 			subscription.unsubscribe();
 		};

@@ -1,30 +1,28 @@
 <script lang="ts">
+	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
 	import { supabaseClient } from '$lib/db';
 	import { user } from '$lib/stores/user';
+	import type { Expense } from '$lib/types/expense';
 	import type { User } from '$lib/types/user';
-	type Expense = {
-		group_id: string;
-		paid_by: User;
-		amount: string;
-		currency: string;
-		comment: string;
-	};
 
 	export let data;
 
 	let { users } = data;
 	let expense: Expense = {
 		group_id: $page.params.group,
-		paid_by: $user.id,
+		paid_by_user_id: $user.id,
 		amount: '0',
 		currency: 'kr.',
 		comment: ''
 	};
 
+	$: payingUser = users.find((user: User) => user.id == expense.paid_by_user_id);
+	$: myShare = parseFloat(expense.amount) / users.length;
+
 	let spliceIndex = Math.floor(users.length / 2);
 	users.splice(spliceIndex, 0, $user);
-	expense.paid_by = users[spliceIndex];
+	expense.paid_by_user_id = users[spliceIndex].id;
 
 	function changeCurrecy() {
 		// TODO: Change currency to a list of currencies
@@ -57,12 +55,12 @@
 		if (expense.amount == '0') return;
 		const dbExpense = {
 			...expense,
-			amount: parseFloat(expense.amount),
-			paid_by: expense.paid_by.id
+			amount: parseFloat(expense.amount)
 		};
 		try {
-			const { data, error } = await supabaseClient.from('expense').insert(dbExpense).select();
+			const { data, error } = await supabaseClient.from('expenses').insert(dbExpense).select();
 			console.log('data: ', data);
+			if (!error) goto(`/groups/${$page.params.group}`);
 		} catch (error) {
 			console.log(error);
 		}
@@ -77,19 +75,19 @@
 		<div class="my-4 min-h-8 container flex flex-col items-center space-y-2 overflow-x-hidden">
 			<p class="text-base-content text-lg">New amount</p>
 			<div class="flex items-center justify-center space-x-6 w-full overflow-x-hidden">
-				<select bind:value={expense.paid_by.username} class="select max-w-xs">
+				<select bind:value={expense.paid_by_user_id} class="select max-w-xs">
 					{#each users as user}
-						<option value={user.user_metadata.name} class:selected={user.user_metadata.name == 'Me'}
+						<option value={user.id} class:selected={user.user_metadata.name == 'me'}
 							>{user.user_metadata.name}</option
 						>
 					{/each}
 				</select>
 			</div>
 			<p class="text-base-content text-lg">
-				{#if expense.paid_by.name == $user.name}
+				{#if payingUser.user_metadata.name == $user.user_metadata.name}
 					I pay
 				{:else}
-					{expense.paid_by.username} pays
+					{payingUser.user_metadata.name} pays
 				{/if}
 			</p>
 		</div>
@@ -127,7 +125,8 @@
 						<p class="text-xs leading-5 text-base-content">{user.number ?? 'unknown'}</p>
 					</div>
 					<div class="ml-auto flex items-center space-x-5">
-						<p class="font-bold">0.00</p>
+						<!-- TODO: update this number based on how much you should pay and take into account any changes the user makes to this -->
+						<p class="font-bold">{myShare}</p>
 						<i class="fa-sharp fa-solid fa-pen text-primary" />
 					</div>
 				</div>

@@ -1,20 +1,15 @@
 <script>
 	import { user } from '$lib/stores/user';
-	// let groups = [
-	// 	{ name: 'house', total: 1000, myShare: 20 },
-	// 	{ name: 'new years', total: 2009, myShare: 198 }
-	// ];
 
 	export let data;
-	console.log(data);
 	let { groups, invites } = data;
 </script>
 
 <header class="h-16 flex select-none items-center py-2 px-4 shadow-lg bg-base-200">
 	<div class="avatar">
 		<div class="w-10 rounded-full">
-			{#if $user?.user_metadata?.picture}
-				<img src={$user.user_metadata.picture} alt="users google avatar" />
+			{#if $user?.user_metadata?.avatar_url}
+				<img src={$user.user_metadata.avatar_url} alt="users google avatar" />
 			{:else}
 				<img src="https://placeimg.com/192/192/people" alt="radomly generated" />
 			{/if}
