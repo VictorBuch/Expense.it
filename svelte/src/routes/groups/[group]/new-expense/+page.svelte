@@ -7,6 +7,7 @@
 	import type { User } from '$lib/types/user';
 
 	export let data;
+	console.log(data);
 
 	let { users } = data;
 	let expense: Expense = {
