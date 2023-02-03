@@ -25,7 +25,7 @@
 			<i class="fa-solid fa-gear scale-125 text-primary" />
 		</a>
 		<div class="absolute origin-center -bottom-3 z-30 w-full flex items-center justify-center ">
-			<a href={`/groups/${group.id}/expenses`}>
+			<a href={`/groups/${group.id}/view-expenses`}>
 				<span
 					class="badge badge-primary cursor-pointer rounded-xl shadow-sm px-5 relative text-center py-2.5 flex items-center"
 					>View expenses

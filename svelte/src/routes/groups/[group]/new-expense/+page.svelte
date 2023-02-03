@@ -7,9 +7,8 @@
 	import type { User } from '$lib/types/user';
 
 	export let data;
-	console.log(data);
-
 	let { users } = data;
+
 	let expense: Expense = {
 		group_id: $page.params.group,
 		paid_by_user_id: $user.id,

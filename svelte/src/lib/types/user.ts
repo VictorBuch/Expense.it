@@ -1,8 +1,8 @@
 export type User = {
 	id: string;
 	email: string;
-	user_metadata?: {
-		name: string;
-		avatar_url: string;
-	};
+	full_name: string;
+	phone: string;
+	username?: string;
+	avatar_url?: string;
 };
