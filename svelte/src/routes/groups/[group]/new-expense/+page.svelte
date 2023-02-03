@@ -1,24 +1,30 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
 	import { supabaseClient } from '$lib/db';
 	import { user } from '$lib/stores/user';
 	import type { Expense } from '$lib/types/expense';
 	import type { User } from '$lib/types/user';
+	import type { Group } from "$lib/types/group';
 
 	export let data;
-	let { users } = data;
+	let { users, group }: {users:User[], group:Group} = data;
 
 	let expense: Expense = {
-		group_id: $page.params.group,
+		group_id: group.id,
 		paid_by_user_id: $user.id,
 		amount: '0',
 		currency: 'kr.',
 		comment: ''
 	};
 
+	// TODO: proposal - make a user proportions property which will keep track of how much propotional to the expense each user has to pay. 
+	// this can also be set to 0 to exclude a user from the expense.
+
+	
+	
 	$: payingUser = users.find((user: User) => user.id == expense.paid_by_user_id);
-	$: myShare = parseFloat(expense.amount) / users.length;
+	// TODO: use user proportions to calculate share
+	$: getUserShare = (user:User) => expense.amount / users.length;
 
 	let spliceIndex = Math.floor(users.length / 2);
 	users.splice(spliceIndex, 0, $user);
@@ -60,7 +66,7 @@
 		try {
 			const { data, error } = await supabaseClient.from('expenses').insert(dbExpense).select();
 			console.log('data: ', data);
-			if (!error) goto(`/groups/${$page.params.group}`);
+			if (!error) goto(`/groups/${group.id}`);
 		} catch (error) {
 			console.log(error);
 		}
@@ -69,7 +75,7 @@
 
 <main class="h-screen relative">
 	<div class="overflow-y-scroll max-h-[76vh]">
-		<a href={`/groups/${$page.params.group}`}>
+		<a href={`/groups/${group.id}`}>
 			<i class=" fa-solid fa-chevron-left cursor-pointer scale-125 text-primary my-4 mx-4" />
 		</a>
 		<div class="my-4 min-h-8 container flex flex-col items-center space-y-2 overflow-x-hidden">
@@ -77,17 +83,17 @@
 			<div class="flex items-center justify-center space-x-6 w-full overflow-x-hidden">
 				<select bind:value={expense.paid_by_user_id} class="select max-w-xs">
 					{#each users as user}
-						<option value={user.id} class:selected={user.user_metadata.name == 'me'}
-							>{user.user_metadata.name}</option
+						<option value={user.id} class:selected={user.username == 'me'}
+							>{user.username}</option
 						>
 					{/each}
 				</select>
 			</div>
 			<p class="text-base-content text-lg">
-				{#if payingUser.user_metadata.name == $user.user_metadata.name}
+				{#if payingUser.username == $user.username}
 					I pay
 				{:else}
-					{payingUser.user_metadata.name} pays
+					{payingUser.username} pays
 				{/if}
 			</p>
 		</div>
@@ -121,12 +127,12 @@
 						</div>
 					</div>
 					<div class="ml-2">
-						<p class="text-lg leading-5 font-bold text-base-content">{user.user_metadata.name}</p>
-						<p class="text-xs leading-5 text-base-content">{user.number ?? 'unknown'}</p>
+						<p class="text-lg leading-5 font-bold text-base-content">{user.username}</p>
+						<p class="text-xs leading-5 text-base-content">{user.phone ?? 'unknown'}</p>
 					</div>
 					<div class="ml-auto flex items-center space-x-5">
 						<!-- TODO: update this number based on how much you should pay and take into account any changes the user makes to this -->
-						<p class="font-bold">{myShare}</p>
+						<p class="font-bold">{getUserShare(user)}</p>
 						<i class="fa-sharp fa-solid fa-pen text-primary" />
 					</div>
 				</div>
