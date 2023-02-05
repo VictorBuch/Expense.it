@@ -1,22 +1,30 @@
 <script>
+	import { goto } from '$app/navigation';
+	import { supabaseClient } from '$lib/db';
 	import { user } from '$lib/stores/user';
 
 	export let data;
 	let { groups, invites } = data;
+	console.log($user);
+
+	const signout = async () => {
+		const { error } = await supabaseClient.auth.signOut();
+		if (!error) goto('/login');
+	};
 </script>
 
 <header class="h-16 flex select-none items-center py-2 px-4 shadow-lg bg-base-200">
 	<div class="avatar">
 		<div class="w-10 rounded-full">
-			{#if $user?.user_metadata?.avatar_url}
-				<img src={$user.user_metadata.avatar_url} alt="users google avatar" />
+			{#if $user?.avatar_url}
+				<img src={$user.avatar_url} alt="users google avatar" />
 			{:else}
 				<img src="https://placeimg.com/192/192/people" alt="radomly generated" />
 			{/if}
 		</div>
 	</div>
 	<div class="ml-2">
-		<p class="text-md leading-5 font-bold text-base-content">{$user?.user_metadata?.name}</p>
+		<p class="text-md leading-5 font-bold text-base-content">{$user?.full_name}</p>
 	</div>
 	<a href="/groups/invites" class="ml-auto">
 		{#if invites?.length}
@@ -56,6 +64,7 @@
 		</div>
 	{/each}
 </div>
+<!-- <button on:click={signout}>signout</button> -->
 <a
 	href="/groups/create-group"
 	class="btn btn-circle bg-primary hover:bg-primary-focus border-none fixed bottom-4 right-4"

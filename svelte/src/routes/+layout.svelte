@@ -34,8 +34,14 @@
 		});
 
 		if ($page.data.session.user) {
-			user.set($page.data.session.user);
-			goto('/groups');
+			const { data: profile, error } = await supabaseClient
+				.from('profiles')
+				.select('*')
+				.eq('id', $page.data.session.user.id)
+				.single();
+			if (error) throw error;
+			user.set(profile);
+			// goto('/groups');
 		} else {
 			goto('/login');
 		}

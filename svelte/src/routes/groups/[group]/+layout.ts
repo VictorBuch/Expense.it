@@ -14,8 +14,16 @@ export async function load({ params }) {
 
 		return data ?? [];
 	};
+	const getUsers = async () => {
+		const { data, error } = await supabaseClient
+			.from('groups')
+			.select('user_1, user_2, user_3, user_4, user_5, user_6')
+			.eq('id', params.group);
+		return data ?? [];
+	};
 	return {
 		group: getGroup(),
-		expenses: getExpenses()
+		expenses: getExpenses(),
+		users: getUsers()
 	};
 }

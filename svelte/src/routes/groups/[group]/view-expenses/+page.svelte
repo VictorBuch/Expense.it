@@ -1,11 +1,13 @@
-<script>
-	import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
+<script lang="ts">
+	import type { Group } from '$lib/types/group';
+
+	export let data;
+	let { group }: { group: Group } = data;
 </script>
 
 <main class="h-screen relative">
 	<div class="w-full mb-4 h-32 bg-base-300 relative flex items-center justify-center ">
-		<h1 class="text-center text-xl text-base-content font-bold">{$page.params.group}</h1>
+		<h1 class="text-center text-xl text-base-content font-bold">{group.name}</h1>
 		<button on:click={() => window.history.back()}>
 			<i
 				class="fa-solid fa-chevron-left scale-125 drop-shadow-lg text-base-content absolute left-4 top-4"
