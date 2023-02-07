@@ -1,11 +1,12 @@
-<script>
+<script lang="ts">
 	import { supabaseClient } from '$lib/db';
 	import { user } from '$lib/stores/user';
+	import type { Invitation } from '$lib/types/invitation';
 
 	export let data;
-	let { invitations } = data;
+	let { invitations }: { invitations: Invitation[] } = data;
 
-	const removeInviteFromList = (id) => {
+	const removeInviteFromList = (id: number) => {
 		invitations = invitations.filter((invite) => invite.id !== id);
 	};
 
@@ -17,7 +18,10 @@
 		if (error) throw error;
 	};
 
-	const acceptInvitation = async (invitationId, groupId) => {
+	const acceptInvitation = async (
+		invitationId: Invitation['id'],
+		groupId: Invitation['group_id']
+	) => {
 		console.log('accept invite', invitationId, groupId);
 		// Find the group corresponding to the invite group id
 		// Then find the user_x column that is empty

@@ -41,7 +41,7 @@
 				.single();
 			if (error) throw error;
 			user.set(profile);
-			// goto('/groups');
+			goto('/groups');
 		} else {
 			goto('/login');
 		}

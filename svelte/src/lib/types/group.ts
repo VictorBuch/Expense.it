@@ -8,4 +8,5 @@ export type Group = {
 	cover?: string;
 	total_expenses: number;
 	expenses_paid: boolean;
+	expenses_last_paid_date: Date;
 };

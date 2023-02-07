@@ -11,15 +11,22 @@ export const load: PageLoad = async () => {
 			.eq('user_1', get(user).id);
 		return data ?? [];
 	};
+	// const getInvites = async () => {
+	// 	const { data, error } = await supabaseClient
+	// 		.from('invitations')
+	// 		.select('*')
+	// 		.eq('invited_user_id', get(user).id);
+	// 	return data ?? [];
+	// };
 	const getInvites = async () => {
 		const { data, error } = await supabaseClient
 			.from('invitations')
-			.select('*')
+			.select('*, group_id (name, id)')
 			.eq('invited_user_id', get(user).id);
 		return data ?? [];
 	};
 	return {
 		groups: getGroups(),
-		invites: getInvites()
+		invitations: getInvites()
 	};
 };

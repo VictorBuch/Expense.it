@@ -1,10 +1,12 @@
-<script>
+<script lang="ts">
 	import { goto } from '$app/navigation';
 	import { supabaseClient } from '$lib/db';
 	import { user } from '$lib/stores/user';
+	import type { Group } from '$lib/types/group';
+	import type { Invitation } from '$lib/types/invitation';
 
 	export let data;
-	let { groups, invites } = data;
+	let { groups, invites }: { groups: Group[]; invites: Invitation[] } = data;
 	console.log($user);
 
 	const signout = async () => {

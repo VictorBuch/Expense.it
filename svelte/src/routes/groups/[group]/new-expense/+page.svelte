@@ -93,8 +93,21 @@
 		};
 		try {
 			const { data, error } = await supabaseClient.from('expenses').insert(dbExpense).select();
-			console.log('data: ', data);
-			if (!error) goto(`/groups/${group.id}`);
+			if (error) throw error;
+			console.log(group.id);
+			// TODO: make updating this fucker work
+			const { data: groupExpense, error: groupError } = await supabaseClient
+				.from('groups')
+				.update({
+					total_expenses: group.total_expenses + parseFloat(expense.amount),
+					expenses_paid: false
+				})
+				.eq('id', group.id)
+				.select();
+			console.log(groupExpense);
+
+			if (error) throw error;
+			goto(`/groups/${group.id}`);
 		} catch (error) {
 			console.log(error);
 		}
